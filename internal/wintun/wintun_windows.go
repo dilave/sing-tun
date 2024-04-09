@@ -49,10 +49,9 @@ func CreateAdapter(name string, tunnelType string, requestedGUID *windows.GUID) 
 	if err != nil {
 		return
 	}
-	r0, _, e1 := syscall.Syscall(procWintunCreateAdapter.Addr(), 3, uintptr(unsafe.Pointer(name16)), uintptr(unsafe.Pointer(tunnelType16)), uintptr(unsafe.Pointer(requestedGUID)))
+	r0, _, _ := syscall.Syscall(procWintunCreateAdapter.Addr(), 3, uintptr(unsafe.Pointer(name16)), uintptr(unsafe.Pointer(tunnelType16)), uintptr(unsafe.Pointer(requestedGUID)))
 	if r0 == 0 {
-		err = e1
-		return
+		return OpenAdapter(name)
 	}
 	wintun = &Adapter{handle: r0}
 	runtime.SetFinalizer(wintun, closeAdapter)
